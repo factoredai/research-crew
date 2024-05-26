@@ -1,0 +1,8 @@
+crewai==0.30.11
+crewai_tools
+langchain
+langchain_community
+langchain_groq
+langchain_openai
+pydantic
+beautifulsoup4
