@@ -1,0 +1,82 @@
+[general]
+run_directory = "../data/app_history"
+log_level = "INFO"
+timeout_seconds = 30
+
+[query_processing]
+keywords_extraction_method = "nltk"  # Options: nltk, spacy, custom
+expand_concepts = true
+stopwords_file = "config/stopwords.txt"
+
+[web_search]
+search_engine = "google"  # Options: google, bing, duckduckgo
+max_results = 10
+search_timeout_seconds = 15
+
+[content_retrieval]
+max_content_length = 10000  # Maximum number of characters to retrieve
+content_parsing_method = "beautifulsoup"  # Options: beautifulsoup, lxml
+allowed_content_types = ["text/html", "application/pdf"]
+min_relevance_score = 0.7
+exclude_low_quality_sources = true
+filtering_criteria = "relevance"  # Options: relevance, recency, source_quality
+
+[pre_report_summarization]
+map_model = "gpt-4o-mini"
+map_prompt = "Write a concise summary of the following:\\n\\n{content}"
+reduce_model = "gpt-4o-mini"
+reduce_prompt = """
+The following is a set of summaries:
+{docs}
+Take these and distill it into a final, consolidated summary
+of the main themes.
+"""
+max_num_tokens2summarize = 4000
+
+[content_analysis]
+analysis_depth = "deep"  # Options: shallow, deep
+
+[report_generation]
+include_references = true
+model = "gpt-4o-mini"
+reference_style = "APA"  # Options: APA, MLA, Chicago
+prompt = """
+You are a helpful assistant. Based on the following **user query** and **content**
+build a tech report. Also use your own knowledge.
+
+**User query**: "{user_query}"
+
+**Content**:
+```
+{content}
+```
+
+Synthesize analyzed information into a coherent narrative.
+
+Convert the aggregated and analyzed content into a structured Markdown document. 
+Consider having sections like:
+
+1. Introduction: Brief overview of the research question.
+2. Findings: Detailed analysis, organized by themes or categories.
+3. Comparison: If multiple tools or approaches are discussed, provide a comparison table or summary.
+4. Conclusion: Summarize the key takeaways.
+
+"""
+
+[source_citation]
+enable_citations = true
+citation_style = "APA"  # Options: APA, MLA, Chicago
+citation_database = "config/citation_database.json"
+
+[output_refinement]
+refine_language = true
+refinement_style = "technical"  # Options: technical, general, casual
+max_refinement_iterations = 3
+refinement_prompt = """
+Refine the following text for clarity and technical accuracy. Ensure the language is precise and professional, suitable for an expert audience.
+"""
+
+[final_review]
+enable_final_check = true
+check_completeness = true
+check_relevance = true

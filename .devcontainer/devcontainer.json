@@ -1,0 +1,44 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/python
+{
+	"name": "reportgen_agent",
+	"build": {
+		"dockerfile": "Dockerfile"
+	},
+
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	// "features": {
+	// },
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "make install-linux && poetry run make tests",
+	// "postCreateCommand": "git config --global core.editor 'code --wait' && make install-linux && $(gcloud info --format='value(basic.python_location)') -m pip install numpy",
+	
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	"customizations": {
+		"vscode": {
+			"settings": {
+				"terminal.integrated.defaultProfile.linux": "zsh",
+			},
+			"extensions": [
+				"ms-toolsai.jupyter",
+				"tamasfe.even-better-toml"
+			]
+		}
+	}
+}
+
+
+// if [ -z "$SSH_AUTH_SOCK" ]; then
+//    # Check for a currently running instance of the agent
+//    RUNNING_AGENT="`ps -ax | grep 'ssh-agent -s' | grep -v grep | wc -l | tr -d '[:space:]'`"
+//    if [ "$RUNNING_AGENT" = "0" ]; then
+//         # Launch a new instance of the agent
+//         ssh-agent -s &> $HOME/.ssh/ssh-agent
+//    fi
+//    eval `cat $HOME/.ssh/ssh-agent`
+//    ssh-add ~/.ssh/id_ed25519
+// fi
