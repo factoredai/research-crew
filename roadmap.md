@@ -2,14 +2,6 @@
 
 #### **Phase 1: MVP Implementation**
 
-1. **Integration**
-   - **Task**: Integrate the above components into the graph.
-   - **Details**: 
-     - Connect the nodes with edges and test the entire graph workflow to ensure it works as expected.
-
-#### **Phase 2: Post-MVP Enhancements**
-reportgen_agent/core/executor.py is not being used!!!
-
 1. **Step 1: Query Processing**
    - **Task**: Implement the `process_query` function.
    - **Purpose**: Parse the input query, extract keywords, and expand concepts.
@@ -23,6 +15,16 @@ reportgen_agent/core/executor.py is not being used!!!
    - **Details**: 
      - Input: Keywords and expanded concepts.
      - Output: A list of search results (URLs and snippets).
+
+1. **Integration**
+   - **Task**: Integrate the above components into the graph.
+   - **Details**: 
+     - Connect the nodes with edges and test the entire graph workflow to ensure it works as expected.
+
+#### **Phase 2: Post-MVP Enhancements**
+reportgen_agent/core/executor.py is not being used!!!
+
+
 
 1. **Step 4: Content Analysis**
    - **Task**: Implement the `analyze_content` function.
