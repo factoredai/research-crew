@@ -3,10 +3,13 @@
 	"build": {
 		"dockerfile": "Dockerfile"
 	},
+	// For having git ssh credentials
+	"mounts": [
+		"source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached"
+	],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
 	"postCreateCommand": "poetry install",
-	// "postCreateCommand": "make install-linux && poetry run make tests",
 	
 	"customizations": {
 		"vscode": {
@@ -21,6 +24,8 @@
 	}
 }
 
+// For having git credentials in the container, add these lines to your 
+// ~/.bash_profile or ~/.zprofile (for Zsh) so it starts on login:
 
 // if [ -z "$SSH_AUTH_SOCK" ]; then
 //    # Check for a currently running instance of the agent
