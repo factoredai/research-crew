@@ -1,90 +1,171 @@
 # Roadmap
 
-#### **Phase 1: MVP Implementation**
+## Phase 1: MVP Implementation
 
-1. **Step 1: Query Processing**
-   - **Task**: Implement the `process_query` function.
-   - **Purpose**: Parse the input query, extract keywords, and expand concepts.
+1. **Development Environment Setup**
+   - **Task**: Migrate from conda envs to devcontainer + poetry
+   - **Details**:
+     - Set up a devcontainer configuration
+     - Create a pyproject.toml file for poetry
+     - Update documentation for new development setup
+
+2. **User Interface Development**
+   - **Task**: Create run script and Jupyter notebook
+   - **Details**:
+     - Implement a script that accepts user queries and optional webpage inputs
+     - Develop a Jupyter notebook for flexible usage and demonstration
+
+## Phase 2: Debugging and Quality Assurance
+
+1. **Query Processing Effectiveness**
+   - **Task**: Test if keywords and concept expansion improve finding relevant links
    - **Details**: 
-     - Input: Raw query string.
-     - Output: Updated state with keywords and expanded concepts.
+     - Compare search results with and without enhanced query processing
 
-1. **Step 2: Web Search**
-   - **Task**: Implement the `perform_web_search_node` function.
-   - **Purpose**: Perform web searches using the extracted keywords and concepts.
+2. **Map Summarizations Validation**
+   - **Task**: Check if map summarizations retain important information
    - **Details**: 
-     - Input: Keywords and expanded concepts.
-     - Output: A list of search results (URLs and snippets).
+     - Analyze the quality and relevance of individual summaries
 
-1. **Integration**
-   - **Task**: Integrate the above components into the graph.
+3. **Final Summary Quality Assessment**
+   - **Task**: Evaluate if the final summary accurately represents the content
    - **Details**: 
-     - Connect the nodes with edges and test the entire graph workflow to ensure it works as expected.
+     - Compare the final summary with the original content for completeness and relevance
 
-#### **Phase 2: Post-MVP Enhancements**
-reportgen_agent/core/executor.py is not being used!!!
-
-
-
-1. **Step 4: Content Analysis**
-   - **Task**: Implement the `analyze_content` function.
-   - **Purpose**: Analyze and summarize the retrieved content.
+4. **Report Generation Evaluation**
+   - **Task**: Check if the final report writing is appropriate based on the summary
    - **Details**: 
-     - Input: Retrieved content.
-     - Output: Summarized and analyzed information.
-   1. **Step 6: Information Filtering**
-      - **Task**: Implement the `filter_information` function.
-      - **Purpose**: Filter the retrieved content to prioritize high-quality and relevant information.
-      - **Details**: 
-        - Input: Retrieved content.
-        - Output: Filtered content.
-   1. **Fact Extraction and Verification**
-     - **Task**: Extract key facts from the content and optionally verify them against a known dataset or external API.
-     - **Approach**: Use information retrieval techniques to pull out facts and statements, then cross-reference them with authoritative sources. This is useful for ensuring the accuracy of the information in your reports.
-   2. **Contextual Analysis**
-      - **Task**: Understand the broader context of the content, including any implied meanings, assumptions, or underlying narratives.
-      - **Approach**: Analyze the content to detect nuances, underlying arguments, or perspectives that are not immediately apparent. This could involve deeper LLM-based analysis that looks at context beyond the explicit text.
-   3. **Comparative Analysis**
-      - **Task**: Compare different pieces of content or sources to identify similarities, differences, and unique insights.
-      - **Approach**: Analyze and contrast multiple documents to find consensus or conflicting information. This could be useful for producing a balanced report that considers multiple perspectives.
-    4. **Quality Assessment**
-      - **Task**: Assess the quality, credibility, and relevance of the content.
-      - **Approach**: Evaluate the source and content quality based on predefined criteria such as source authority, writing quality, and relevance to the query. This helps in filtering out low-quality or irrelevant information.
+     - Assess the coherence and structure of the generated report
 
-1. **Content Structuring for Reports**
-   - **Task**: Organize the analyzed content in a way that it can be effectively used in report generation.
-   - **Approach**: Structure the content based on themes, topics, or relevance so that the report generation node can use it directly. This might involve creating outlines, bullet points, or section headers that guide the report structure.
-
-2. **Step 7: Source Citation**
-   - **Task**: Implement the `add_citations` function.
-   - **Purpose**: Add citations and references to the generated report.
+5. **Report Refinement Testing**
+   - **Task**: Evaluate if report refinement improves the quality of the final report
    - **Details**: 
-     - Input: Analyzed content and sources.
-     - Output: Updated report with citations.
+     - Compare pre-refined and post-refined reports for improvements
 
-3. **Step 8: Output Refinement**
-   - **Task**: Implement the `refine_output` function.
-   - **Purpose**: Refine the language and format of the generated report for better readability.
+6. **End-to-End Quality Assessment**
+   - **Task**: Perform comprehensive testing of the entire workflow
    - **Details**: 
-     - Input: Generated report.
-     - Output: Refined report with improved clarity and structure.
+     - Test with various queries and gather feedback on report quality
 
-4. **Step 9: Final Review**
-   - **Task**: Implement the `review_final_output` function.
-   - **Purpose**: Perform a final check to ensure the report is complete and accurate.
+## Phase 3: Post-MVP Enhancements
+
+1. **Content Retrieval and Parsing**
+   - **Task**: Enhance the `retrieve_content` function
    - **Details**: 
-     - Input: Final report.
-     - Output: Reviewed and finalized report, ready for delivery.
+     - Implement HTML/PDF parsing
+     - Add support for user-provided references
 
-5. **Testing and Validation**
-   - **Task**: Thoroughly test each new component individually and within the entire graph.
+2. **Content Analysis Subgraph**
+   - **Task**: Implement a comprehensive content analysis subgraph
    - **Details**: 
-     - Validate the correctness and completeness of each node.
+     - Create a subgraph structure for content analysis
+     - Implement the following nodes within the subgraph:
+       a. **Information Filtering**
+          - Implement relevance assessment using LLM
+          - Develop a ranking algorithm for content
+       b. **Text Summarization**
+          - Implement extractive and/or abstractive summarization techniques
+       c. **Key Points and Trends Identification**
+          - Develop algorithms to extract main ideas and identify trends
+       d. **Fact Extraction and Verification**
+          - Implement fact extraction from text
+          - Develop a verification system using reliable sources
+       e. **Contextual Analysis**
+          - Implement analysis of content in relation to the query context
+       f. **Comparative Analysis**
+          - Develop methods to compare and contrast different pieces of content
+       g. **Quality Assessment**
+          - Implement metrics and algorithms to assess content quality
+     - Ensure proper flow and integration between nodes in the subgraph
+     - Implement error handling and logging within the subgraph
 
-#### **Phase 3: Future Enhancements**
+3. **Content Structuring for Reports**
+   - **Task**: Organize analyzed content for effective report generation
+   - **Details**: 
+     - Develop a system to structure content based on themes and relevance
+     - Create outlines and section headers for report structure
 
-1. **Step 11: Advanced Analysis Techniques**
-   - **Task**: Implement more sophisticated content analysis techniques, such as sentiment analysis or trend detection.
+4. **Report Generation**
+   - **Task**: Enhance the `generate_report` function
+   - **Details**: 
+     - Implement structured output in Markdown format
+     - Add section generation (Introduction, Findings, Comparison, Conclusion)
 
-1. **Step 12: Performance Optimization**
-   - **Task**: Optimize the workflow for faster execution, possibly by parallelizing certain tasks.
+5. **Source Citation**
+   - **Task**: Implement the `add_citations` function
+   - **Details**: 
+     - Create a new node for adding citations
+     - Implement a citation style (e.g., APA, MLA)
+     - Develop a system to track and cite sources
+
+6. **Output Refinement**
+   - **Task**: Implement the `refine_output` function
+   - **Details**: 
+     - Create a new node for refining the output
+     - Implement language improvement using LLM
+     - Add formatting checks for Markdown structure
+
+7. **Final Review**
+   - **Task**: Implement the `review_final_output` function
+   - **Details**: 
+     - Create a new node for final review
+     - Implement relevance check against original query
+     - Add completeness and quality checks
+
+8. **Error Handling and Retries**
+    - **Task**: Enhance error handling throughout the system
+    - **Details**:
+      - Implement robust exception handling
+      - Add retry logic for API calls and database operations
+      - Create a centralized error logging and monitoring system
+
+9. **Data Structure Optimization**
+    - **Task**: Review and optimize data structures
+    - **Details**:
+      - Analyze current data structures for bottlenecks
+      - Implement more efficient alternatives where necessary
+      - Consider specialized data structures for specific use cases
+
+10. **Performance Profiling and Optimization**
+    - **Task**: Identify and optimize performance bottlenecks
+    - **Details**:
+      - Use profiling tools to identify slow parts of the code
+      - Analyze and optimize the identified bottlenecks
+      - Implement performance metrics and monitoring
+
+11. **Caching Implementation**
+    - **Task**: Add caching mechanisms
+    - **Details**:
+      - Implement caching for LLM responses
+      - Add caching for frequently accessed data
+      - Consider distributed caching solutions for scalability
+
+12. **Testing and Validation**
+    - **Task**: Implement comprehensive testing
+    - **Details**: 
+      - Develop unit tests for each node
+      - Create integration tests for the entire graph
+      - Implement end-to-end tests with various input scenarios
+
+13. **Documentation Update**
+    - **Task**: Update project documentation
+    - **Details**:
+      - Update README with new setup instructions
+      - Document each node's functionality and inputs/outputs
+      - Create user guide for running the agent with different inputs
+
+
+## Phase 4: Future Enhancements
+
+1. **Advanced Analysis Techniques**
+   - **Task**: Implement more sophisticated content analysis techniques
+   - **Details**: 
+     - Add sentiment analysis functionality
+     - Implement trend detection
+
+2. **Performance Optimization**
+   - **Task**: Optimize the workflow for faster execution
+   - **Details**: 
+     - Identify and implement parallel execution where possible
+
+Note: The `reportgen_agent/core/executor.py` file is currently not being used and should be reviewed for potential removal or integration.

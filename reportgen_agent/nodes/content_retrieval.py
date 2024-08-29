@@ -1,8 +1,7 @@
-from typing import Dict, List
-
 from reportgen_agent.core.state import ReportGenState
 from reportgen_agent.utils import is_valid_url
 from reportgen_agent.utils.web_fetcher import process_urls
+
 
 # TODO: Improve to also retrieve from local files and pdfs
 # What happen to URL of pdfs???

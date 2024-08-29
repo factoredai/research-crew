@@ -1,12 +1,23 @@
-PYTHON_VERSION := 3.11
-CONDA_ENV_NAME := reportgen
-ENV_FILE_NAME := reportgen_conda_env
+POETRY_ENV_NAME := reportgen
 
-env-save:
-	@conda env export -n $(CONDA_ENV_NAME) --no-builds | grep -v "prefix" > $(ENV_FILE_NAME).yml
+.PHONY: env-create env-remove format lint test check type-checking
 
 env-create:
-	@conda env create -n $(CONDA_ENV_NAME) --file $(ENV_FILE_NAME).yml
+	@poetry install
 
 env-remove:
-	@conda env remove -n $(CONDA_ENV_NAME) --yes
+	@poetry env remove $(POETRY_ENV_NAME)
+
+format:
+	@poetry run ruff format .
+
+lint:
+	@poetry run ruff check --fix .
+
+type-checking:
+	@poetry run mypy .
+
+check: format lint type-checking
+
+test: 
+	@poetry run python -m pytest -vv

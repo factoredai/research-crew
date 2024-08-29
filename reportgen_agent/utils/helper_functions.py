@@ -1,11 +1,10 @@
+import logging
 import re
-import logging
-from urllib.parse import urlparse
-import traceback
-import logging
-import time
-from typing import TypedDict, Callable
 import sys
+import time
+import traceback
+from typing import Callable, TypedDict
+from urllib.parse import urlparse
 
 from .storage_utils import save_state
 
@@ -16,20 +15,20 @@ logging.basicConfig(
     handlers=[logging.StreamHandler(sys.stdout)],  # Direct logs to stdout
 )
 
+
 # TODO: It doesn't seem right to wrap every node for adding logging and
 # saving intermediate states. It would be better to have a single
 # parent node class that encapsulate some common functionality.
 def wrap_node_with_logging(
-        node_func: Callable[[TypedDict, str], TypedDict], 
-        run_dir: str
-    ) -> Callable[[TypedDict], TypedDict]:
-    """Wrapper to log the start and end of each pipeline step and pass 
+    node_func: Callable[[TypedDict, str], TypedDict], run_dir: str
+) -> Callable[[TypedDict], TypedDict]:
+    """Wrapper to log the start and end of each pipeline step and pass
     the run_dir to the node function.
 
     Parameters
     ----------
     node_func : Callable[[TypedDict, str], TypedDict]
-        The original node function to be wrapped. It should accept a state (TypedDict) and 
+        The original node function to be wrapped. It should accept a state (TypedDict) and
         a run_dir (str) as arguments, and return an updated state (TypedDict).
     run_dir : str
         The directory where run-specific data and logs are stored.
@@ -47,6 +46,7 @@ def wrap_node_with_logging(
     3. Catches and logs any exceptions that occur during the step execution.
     4. Saves the state after successful execution of the step.
     """
+
     def wrapped_node_func(state: TypedDict) -> TypedDict:
         step_name = node_func.__name__
         logging.info(f"Starting step: {step_name}")
@@ -65,6 +65,7 @@ def wrap_node_with_logging(
         return result_state
 
     return wrapped_node_func
+
 
 def is_valid_url(url: str) -> bool:
     """
@@ -99,66 +100,66 @@ def is_valid_url(url: str) -> bool:
         return False
 
 
-
-
-
 def clean_text(text: str) -> str:
     """
     Clean up text by removing unwanted characters, extra spaces, etc.
-    
+
     Args:
         text (str): The text to clean.
-        
+
     Returns:
         str: The cleaned text.
     """
-    text = re.sub(r'\s+', ' ', text)  # Replace multiple spaces with a single space
-    text = re.sub(r'[^\w\s]', '', text)  # Remove punctuation
+    text = re.sub(r"\s+", " ", text)  # Replace multiple spaces with a single space
+    text = re.sub(r"[^\w\s]", "", text)  # Remove punctuation
     return text.strip()
+
 
 def setup_logging(log_level=logging.INFO) -> None:
     """
     Setup logging configuration.
-    
+
     Args:
         log_level: The logging level (default: logging.INFO).
     """
-    logging.basicConfig(level=log_level,
-                        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    logging.basicConfig(level=log_level, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
     logging.info("Logging is set up.")
+
 
 def chunk_text(text: str, chunk_size: int) -> list:
     """
     Split a long string into smaller chunks of a specified size.
-    
+
     Args:
         text (str): The text to chunk.
         chunk_size (int): The maximum size of each chunk.
-        
+
     Returns:
         list: A list of text chunks.
     """
-    return [text[i:i + chunk_size] for i in range(0, len(text), chunk_size)]
+    return [text[i : i + chunk_size] for i in range(0, len(text), chunk_size)]
+
 
 def extract_links(text: str) -> list:
     """
     Extract all URLs from a given text.
-    
+
     Args:
         text (str): The text from which to extract URLs.
-        
+
     Returns:
         list: A list of URLs found in the text.
     """
-    return re.findall(r'http[s]?://\S+', text)
+    return re.findall(r"http[s]?://\S+", text)
+
 
 def validate_markdown_syntax(markdown_text: str) -> bool:
     """
     Placeholder function to validate the syntax of a Markdown document.
-    
+
     Args:
         markdown_text (str): The Markdown text to validate.
-        
+
     Returns:
         bool: True if the syntax is valid, False otherwise.
     """

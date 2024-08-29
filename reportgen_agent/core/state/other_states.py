@@ -1,7 +1,8 @@
-from typing import Annotated, List, TypedDict
 import operator
+from typing import Annotated, List, TypedDict
 
 from langchain_core.documents import Document
+
 
 # This will be the overall state of the main graph.
 # It will contain the input document contents, corresponding

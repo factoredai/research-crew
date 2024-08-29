@@ -1,20 +1,16 @@
-import os
-
+from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
-from langchain_core.output_parsers import StrOutputParser
 
-from reportgen_agent.core.state import OverallState
 from reportgen_agent.config import settings
+from reportgen_agent.core.state import OverallState
 
 # TODO: This is been done twice, here and on `collapse_summaries.py`
 llm = ChatOpenAI(
-    model=settings.pre_report_summarization.reduce_model, 
-    api_key= settings.general.openai_api_key,
+    model=settings.pre_report_summarization.reduce_model,
+    api_key=settings.general.openai_api_key,
 )
-reduce_prompt = ChatPromptTemplate(
-    [("human", settings.pre_report_summarization.reduce_prompt)]
-)
+reduce_prompt = ChatPromptTemplate([("human", settings.pre_report_summarization.reduce_prompt)])
 reduce_chain = reduce_prompt | llm | StrOutputParser()
 
 

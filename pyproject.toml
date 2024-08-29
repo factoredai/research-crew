@@ -9,6 +9,38 @@ readme = "README.md"
 python = "^3.11"
 notebook = "^7.2.1"
 dynaconf = "^3.2.6"
+langgraph = "^0.2.14"
+langchain = "^0.2.15"
+langchain-openai = "^0.1.23"
+langchain-community = "^0.2.14"
+langchain-google-community = "^1.0.8"
+html2text = "^2024.2.26"
+langgraph-checkpoint-sqlite = "^1.0.0"
+ruff = "^0.6.3"
+pytest = "^8.3.2"
+mypy = "^1.11.2"
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+extend-exclude = [
+    ".venv",
+    "notebooks",
+    "data",
+    ".cicd",
+]
+lint.select = ["E", "F", "W", "I"]
+lint.ignore = ["E203", "ANN101", "ANN102", "ANN401"]
+
+[tool.ruff.lint.per-file-ignores]
+"**/__init__.py" = ["F401", "F403"]
+
+[tool.mypy]
+ignore_missing_imports = true
+exclude = [
+    "notebooks",
+    "data",
+]
 
 
 [build-system]

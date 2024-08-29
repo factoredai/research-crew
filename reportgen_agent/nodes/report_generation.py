@@ -1,23 +1,16 @@
-from typing import Dict, List
-
-from langchain_openai import ChatOpenAI
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
+from langchain_openai import ChatOpenAI
 
-from reportgen_agent.core.state import ReportGenState
 from reportgen_agent.config import settings
-
+from reportgen_agent.core.state import ReportGenState
 
 llm = ChatOpenAI(
-    model=settings.report_generation.model, 
+    model=settings.report_generation.model,
     api_key=settings.general.openai_api_key,
 )
 
-prompt = ChatPromptTemplate.from_messages(
-    [(
-        "system", settings.report_generation.prompt.strip()
-    )]
-)
+prompt = ChatPromptTemplate.from_messages([("system", settings.report_generation.prompt.strip())])
 report_generator_chain = prompt | llm | StrOutputParser()
 
 
@@ -43,11 +36,12 @@ def generate_markdown_report(content: str, user_query: str) -> str:
     """
     report = report_generator_chain.invoke(
         input={
-            'user_query': user_query, 
-            'content': content,
+            "user_query": user_query,
+            "content": content,
         }
     )
     return report
+
 
 def generate_report(state: ReportGenState, run_dir: str) -> ReportGenState:
     """Generate a structured Markdown report and update the state.
@@ -72,10 +66,10 @@ def generate_report(state: ReportGenState, run_dir: str) -> ReportGenState:
     """
 
     markdown_report = generate_markdown_report(
-        content = state["analyzed_content"], 
-        user_query = state["query"],
+        content=state["final_summary"],
+        user_query=state["query"],
     )
-    
+
     state["markdown_report"] = markdown_report
 
     return state

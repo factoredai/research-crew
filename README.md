@@ -33,69 +33,119 @@ reportgen_agent/
 
 ## Setup Instructions
 
-### 1. Configure Your Environment
+### Using Development Containers (Recommended)
 
-Before running the project, you need to set up your configuration files.
+Development containers provide a consistent, pre-configured development environment for all contributors. You can use them with various IDEs and container runtimes.
 
-#### Configuration Files
+1. **Prerequisites**:
+   - Install a container runtime (e.g., [Docker](https://www.docker.com/get-started), [Podman](https://podman.io/), or [Lima](https://github.com/lima-vm/lima))
+   - Install an IDE or editor that supports development containers (e.g., Visual Studio Code, PyCharm, or Vim)
 
-1. **Copy the example secrets file:**
+2. **Open the project in a development container**:
+   - Clone the repository: `git clone https://github.com/yourusername/reportgen_agent.git`
+   - Open the project folder in your preferred IDE
+   - Use your IDE's functionality to reopen the project in a development container
 
+3. **Configure your environment**:
+   - Copy the example secrets file:
+     ```bash
+     cp config/.secrets.example.toml config/.secrets.toml
+     ```
+   - Edit `config/.secrets.toml` with your actual API keys and sensitive information
+
+<details>
+<summary>Using Visual Studio Code or Cursor with Docker (click to expand)</summary>
+
+If you're using Visual Studio Code or Cursor (a fork of VS Code) with Docker, you can follow these specific steps:
+
+1. Install [Visual Studio Code](https://code.visualstudio.com/) or [Cursor](https://cursor.sh/)
+2. Install the [Remote - Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension for VS Code/Cursor
+3. Open the project folder in VS Code/Cursor
+4. When prompted, click "Reopen in Container" or run the "Remote-Containers: Reopen in Container" command from the Command Palette (F1)
+
+Both VS Code and Cursor should automatically detect the `.devcontainer` configuration and offer to reopen the project in a container.
+
+</details>
+
+### Manual Setup (Alternative)
+
+If you prefer not to use development containers, you can set up the project manually:
+
+1. **Prerequisites**:
+   - Python 3.11.x (as specified in `.python-version`)
+   - [Poetry](https://python-poetry.org/docs/#installation)
+   - (Optional) [pyenv](https://github.com/pyenv/pyenv) for managing Python versions
+
+2. **Clone the repository**:
    ```bash
-   cp config/.secrets.example.toml config/.secrets.toml
+   git clone https://github.com/yourusername/reportgen_agent.git
+   cd reportgen_agent
    ```
 
-2. **Edit `.secrets.toml` with your actual API keys and sensitive information:**
-
-   Open `config/.secrets.toml` in your preferred text editor and replace the placeholder values with your actual credentials:
-
-   ```toml
-   [default]
-   SEARCH_API_KEY = "your-real-search-api-key"
-   LLM_API_KEY = "your-real-llm-api-key"
+3. **Install dependencies**:
+   ```bash
+   poetry install
    ```
 
-3. **General Configuration:**
-
-   The general configuration is managed in `config/settings.toml`. This file contains non-sensitive configurations like logging levels, directory paths, etc.
-
-### 2. Install dependencies
-
-To set up the project, follow these steps:
-
-1. **Clone the repository**:
-    ```bash
-    git clone https://github.com/yourusername/reportgen_agent.git
-    cd reportgen_agent
-    ```
-
-2. **Install dependencies**:
-    Make sure you have Python 3.8+ installed. You can create a virtual environment and install the required packages:
-    ```bash
-    python3 -m venv venv
-    source venv/bin/activate
-    pip install -r requirements.txt
-    ```
-
-3. **Configure settings**:
-    Update the `settings.py` file in the `reportgen_agent/config` directory with your API keys and other configuration details.
+4. **Configure your environment**:
+   - Follow the same configuration steps as in the development container setup
 
 ## Usage
 
-To run the ReportGen Agent, execute the main script:
+To run the ReportGen Agent, execute the main script with a query:
 
 ```bash
-python run.py
+python run.py "What are the latest AI trends?"
 ```
 
-The main script initializes the workflow and processes an example query. You can modify the query and other settings within the script or pass them as arguments.
+The script will process the query, generate a report, and save it as a Markdown file in a newly created run directory.
+
+## Development Commands
+
+The project uses a Makefile to simplify common development tasks. Here are the available commands:
+
+- Create a new Poetry environment:
+  ```
+  make env-create
+  ```
+
+- Remove the Poetry environment:
+  ```
+  make env-remove
+  ```
+
+- Format the code:
+  ```
+  make format
+  ```
+
+- Run linting:
+  ```
+  make lint
+  ```
+
+- Run type checking:
+  ```
+  make type-checking
+  ```
+
+- Run all checks (format, lint, and type-checking):
+  ```
+  make check
+  ```
+
+- Run tests:
+  ```
+  make test
+  ```
+
 
 ## Running Tests
 
 To run the tests, use:
 
 ```bash
-pytest tests/
+make test
 ```
 
 This will execute all unit and integration tests to ensure that each component of the workflow functions as expected.

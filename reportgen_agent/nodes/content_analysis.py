@@ -1,5 +1,7 @@
-from typing import Dict, List, Literal, Optional
+from typing import List, Optional
+
 from reportgen_agent.core.state import ReportGenState
+
 
 def filter_and_rank_content(content_list: List[Optional[str]], keywords: Optional[List[str]] = None) -> List[str]:
     """Placeholder function to filter and rank content based on relevance to the keywords.
@@ -22,10 +24,14 @@ def filter_and_rank_content(content_list: List[Optional[str]], keywords: Optiona
     sorted by length as a dummy ranking. It filters out None values.
     """
     # Placeholder implementation: Just returns the content sorted by length as a dummy ranking
-    return sorted([content for content in content_list if content is not None], key=len, reverse=True)
+    return sorted(
+        [content for content in content_list if content is not None],
+        key=len,
+        reverse=True,
+    )
 
 
-# TODO: This should be a whole subgraph in the future. "Garbage in, 
+# TODO: This should be a whole subgraph in the future. "Garbage in,
 # garbage out" also applies for report generation
 def analyze_content(state: ReportGenState, run_dir: str) -> ReportGenState:
     """Analyze the filtered content and update the state with the summarized information.
@@ -44,7 +50,7 @@ def analyze_content(state: ReportGenState, run_dir: str) -> ReportGenState:
     """
 
     analyzed_content = filter_and_rank_content(state["retrieved_content"])
-    
+
     state["analyzed_content"] = analyzed_content
 
     return state

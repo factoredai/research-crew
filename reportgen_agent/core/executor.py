@@ -1,6 +1,7 @@
 from reportgen_agent.core.graph import create_graph
 from reportgen_agent.core.state import ReportGenState
 
+
 class ReportGenExecutor:
     """Executor class for managing the ReportGen workflow."""
 
@@ -20,13 +21,14 @@ class ReportGenExecutor:
             retrieved_content=[],
             filtered_content=[],
             analyzed_content=[],
-            markdown_report=""
+            markdown_report="",
         )
 
     def run(self) -> str:
         """Run the workflow and return the final report."""
         result_state = self.graph.invoke(self.state)
         return result_state["markdown_report"]
+
 
 # Example of how this class could be used:
 # executor = ReportGenExecutor("How does Python handle multithreading in data pipelines?")

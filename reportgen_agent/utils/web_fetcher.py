@@ -1,13 +1,13 @@
 import asyncio
 import re
-from typing import List, Optional, Dict, Any
+from typing import Any, Dict, List, Optional
 
 import aiohttp
-import aiofiles
 import html2text
 from bs4 import BeautifulSoup
 
 from reportgen_agent.utils.storage_utils import save_webpage
+
 
 def process_urls(urls: List[str], run_dir: str) -> List[Optional[str]]:
     """Process a list of URLs asynchronously.
@@ -25,6 +25,7 @@ def process_urls(urls: List[str], run_dir: str) -> List[Optional[str]]:
         List of processed contents or None for failed URLs.
     """
     return asyncio.run(process_urls_async(urls=urls, run_dir=run_dir))
+
 
 async def process_urls_async(**params: Dict[str, Any]) -> List[Optional[str]]:
     """Asynchronously process multiple URLs.
@@ -45,18 +46,15 @@ async def process_urls_async(**params: Dict[str, Any]) -> List[Optional[str]]:
     async with aiohttp.ClientSession() as session:
         tasks = [fetch_and_save_url(session, url, run_dir) for url in urls]
         results = await asyncio.gather(*tasks)
-    
+
     return results
+
 
 # TODO: This is a naive way to scrape and avoid bot blocking. We will
 # possibly need in the future more advanced techniques for bot passing
 # and dealing with javascript-heavy sites (playwright or selenium for
 # the rescue?)
-async def fetch_and_save_url(
-        session: aiohttp.ClientSession, 
-        url: str, 
-        run_dir: str
-    ) -> Optional[str]:
+async def fetch_and_save_url(session: aiohttp.ClientSession, url: str, run_dir: str) -> Optional[str]:
     """Fetch URL content, save it, and process it.
 
     Parameters
@@ -79,7 +77,7 @@ async def fetch_and_save_url(
             "(KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
         )
     }
-    
+
     try:
         async with session.get(url, headers=headers) as response:
             if response.status != 200:
@@ -95,7 +93,7 @@ async def fetch_and_save_url(
         # options to generate markdown from html
         markdown_content = html2text.html2text(html_content)
         markdown_content = remove_urls(markdown_content)
-        markdown_content = remove_consecutive_empty_lines(markdown_content)  
+        markdown_content = remove_consecutive_empty_lines(markdown_content)
         markdown_content = remove_lines_with_special_chars_and_numbers(markdown_content)
 
         return markdown_content
@@ -105,8 +103,7 @@ async def fetch_and_save_url(
         return None
 
 
-
-# TODO: This reduce number of tokens but in the future we shouldn't do 
+# TODO: This reduce number of tokens but in the future we shouldn't do
 # that as links on webpages might be good links to scrape data too.
 def remove_urls(markdown_content: str) -> str:
     """Remove URLs and images from markdown content.
@@ -121,18 +118,8 @@ def remove_urls(markdown_content: str) -> str:
     str
         Markdown content with URLs and images removed.
     """
-    markdown_content_no_images = re.sub(
-        r"!\[.*?\]\([^)]+\)", 
-        "", 
-        markdown_content, 
-        flags=re.DOTALL
-    )
-    markdown_content_no_urls = re.sub(
-        r"\[([^]]+)\]\([^)]+\)", 
-        r"\1", 
-        markdown_content_no_images, 
-        flags=re.DOTALL
-    )
+    markdown_content_no_images = re.sub(r"!\[.*?\]\([^)]+\)", "", markdown_content, flags=re.DOTALL)
+    markdown_content_no_urls = re.sub(r"\[([^]]+)\]\([^)]+\)", r"\1", markdown_content_no_images, flags=re.DOTALL)
     return markdown_content_no_urls
 
 
@@ -150,6 +137,7 @@ def remove_consecutive_empty_lines(markdown_content: str) -> str:
         Markdown content with consecutive empty lines removed.
     """
     return re.sub(r"\n\s*\n+", "\n\n", markdown_content)
+
 
 def remove_lines_with_special_chars_and_numbers(text: str) -> str:
     """Remove lines containing only special characters or numbers.
@@ -174,4 +162,3 @@ def remove_lines_with_special_chars_and_numbers(text: str) -> str:
 
     cleaned_text = "\n".join(cleaned_lines)
     return cleaned_text
-

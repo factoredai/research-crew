@@ -3,26 +3,21 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
 from langgraph.constants import Send
 
-from reportgen_agent.core.state import SummaryState
-from reportgen_agent.core.state import OverallState
 from reportgen_agent.config import settings
-
+from reportgen_agent.core.state import OverallState, SummaryState
 
 llm = ChatOpenAI(
-    model=settings.pre_report_summarization.map_model, 
-    api_key=settings.general.openai_api_key)
-
-map_prompt = ChatPromptTemplate.from_messages(
-    [("system", settings.pre_report_summarization.map_prompt)]
+    model=settings.pre_report_summarization.map_model,
+    api_key=settings.general.openai_api_key,
 )
+
+map_prompt = ChatPromptTemplate.from_messages([("system", settings.pre_report_summarization.map_prompt)])
 
 map_chain = map_prompt | llm | StrOutputParser()
 
+
 def map_summaries(state: OverallState):
-    messages = [
-        Send("generate_summary", {"content": content}) 
-        for content in state["analyzed_content"]
-    ]
+    messages = [Send("generate_summary", {"content": content}) for content in state["analyzed_content"]]
     return messages
 
 

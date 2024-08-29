@@ -1,30 +1,55 @@
 [general]
 run_directory = "../data/app_history"
-log_level = "INFO"
-timeout_seconds = 30
+# log_level = "INFO"
+# timeout_seconds = 30
 
 [query_processing]
-keywords_extraction_method = "nltk"  # Options: nltk, spacy, custom
+# stopwords_file = "config/stopwords.txt"
+# keywords_extraction_method = "llm"  # Options: nltk, spacy, custom
 expand_concepts = true
-stopwords_file = "config/stopwords.txt"
+keyword_extraction_model = "gpt-4o-2024-08-06"
+concept_expansion_model = "gpt-4o-2024-08-06"
+max_keywords = 5
+max_concepts = 5
+keyword_extraction_prompt = """
+Given the following user query: "{query}"
+
+Please extract up to {max_keywords} important keywords from this query. 
+Focus on nouns, verbs, and adjectives that capture the main topics and intentions of the query. 
+Avoid common words or stopwords unless they are crucial to understanding the query's context.
+"""
+
+concept_expansion_prompt = """
+Given the following user query: "{query}"
+And the extracted keywords: {keywords}
+
+Please provide a list of up to {max_concepts} related concepts, terms, or ideas that would be relevant for expanding this query.
+Each concept should be closely related to the query and/or one or more of the given keywords.
+"""
 
 [web_search]
-search_engine = "google"  # Options: google, bing, duckduckgo
+provider = "tavily"  # Options: tavily, serpapi, google, bing, brave
 max_results = 10
-search_timeout_seconds = 15
+max_search_terms = 10
+num_results = 5
+# num_results = 10
+# num_results = 20
 
-[content_retrieval]
-max_content_length = 10000  # Maximum number of characters to retrieve
-content_parsing_method = "beautifulsoup"  # Options: beautifulsoup, lxml
-allowed_content_types = ["text/html", "application/pdf"]
-min_relevance_score = 0.7
-exclude_low_quality_sources = true
-filtering_criteria = "relevance"  # Options: relevance, recency, source_quality
+
+bing_search_url = "https://api.bing.microsoft.com/v7.0/search"
+
+# [content_retrieval]
+# max_content_length = 10000  # Maximum number of characters to retrieve
+# content_parsing_method = "beautifulsoup"  # Options: beautifulsoup, lxml
+# allowed_content_types = ["text/html", "application/pdf"]
+# min_relevance_score = 0.7
+# exclude_low_quality_sources = true
+# filtering_criteria = "relevance"  # Options: relevance, recency, source_quality
 
 [pre_report_summarization]
-map_model = "gpt-4o-mini"
+map_model = "gpt-4o-mini-2024-07-18"
 map_prompt = "Write a concise summary of the following:\\n\\n{content}"
-reduce_model = "gpt-4o-mini"
+reduce_model = "gpt-4o-mini-2024-07-18"
 reduce_prompt = """
 The following is a set of summaries:
 {docs}
@@ -33,13 +58,13 @@ of the main themes.
 """
 max_num_tokens2summarize = 4000
 
-[content_analysis]
-analysis_depth = "deep"  # Options: shallow, deep
+# [content_analysis]
+# analysis_depth = "deep"  # Options: shallow, deep
 
 [report_generation]
-include_references = true
-model = "gpt-4o-mini"
-reference_style = "APA"  # Options: APA, MLA, Chicago
+# include_references = true
+# reference_style = "APA"  # Options: APA, MLA, Chicago
+model = "gpt-4o-mini-2024-07-18"
 prompt = """
 You are a helpful assistant. Based on the following **user query** and **content**
 build a tech report. Also use your own knowledge.
@@ -63,20 +88,20 @@ Consider having sections like:
 
 """
 
-[source_citation]
-enable_citations = true
-citation_style = "APA"  # Options: APA, MLA, Chicago
-citation_database = "config/citation_database.json"
+# [source_citation]
+# enable_citations = true
+# citation_style = "APA"  # Options: APA, MLA, Chicago
+# citation_database = "config/citation_database.json"
 
-[output_refinement]
-refine_language = true
-refinement_style = "technical"  # Options: technical, general, casual
-max_refinement_iterations = 3
-refinement_prompt = """
-Refine the following text for clarity and technical accuracy. Ensure the language is precise and professional, suitable for an expert audience.
-"""
+# [output_refinement]
+# refine_language = true
+# refinement_style = "technical"  # Options: technical, general, casual
+# max_refinement_iterations = 3
+# refinement_prompt = """
+# Refine the following text for clarity and technical accuracy. Ensure the language is precise and professional, suitable for an expert audience.
+# """
 
-[final_review]
-enable_final_check = true
-check_completeness = true
-check_relevance = true
+# [final_review]
+# enable_final_check = true
+# check_completeness = true
+# check_relevance = true
