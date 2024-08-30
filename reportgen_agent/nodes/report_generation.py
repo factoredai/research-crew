@@ -4,13 +4,14 @@ from langchain_openai import ChatOpenAI
 
 from reportgen_agent.config import settings
 from reportgen_agent.core.state import ReportGenState
+from reportgen_agent.utils.helper_functions import retry_with_exponential_backoff
 
 llm = ChatOpenAI(
     model=settings.report_generation.model,
     api_key=settings.general.openai_api_key,
 )
 
-prompt = ChatPromptTemplate.from_messages([("system", settings.report_generation.prompt.strip())])
+prompt = ChatPromptTemplate.from_template(settings.report_generation.prompt)
 report_generator_chain = prompt | llm | StrOutputParser()
 
 
@@ -22,7 +23,7 @@ def generate_markdown_report(content: str, user_query: str) -> str:
     content : str
         The analyzed and summarized content.
     user_query : str
-        The original query to be included in the report prompt.
+        The original user_query to be included in the report prompt.
 
     Returns
     -------
@@ -32,13 +33,14 @@ def generate_markdown_report(content: str, user_query: str) -> str:
     Notes
     -----
     This function uses a language model chain to generate the report based on
-    the provided content and user query.
+    the provided content and user user_query.
     """
-    report = report_generator_chain.invoke(
-        input={
+    report = retry_with_exponential_backoff(
+        report_generator_chain.invoke,
+        {
             "user_query": user_query,
             "content": content,
-        }
+        },
     )
     return report
 
@@ -60,14 +62,14 @@ def generate_report(state: ReportGenState, run_dir: str) -> ReportGenState:
 
     Notes
     -----
-    This function extracts the analyzed content and query from the state,
+    This function extracts the analyzed content and user_query from the state,
     generates a Markdown report, and updates the state with the generated report.
     The analyzed_content is expected to be a single string, not a list.
     """
 
     markdown_report = generate_markdown_report(
         content=state["final_summary"],
-        user_query=state["query"],
+        user_query=state["user_query"],
     )
 
     state["markdown_report"] = markdown_report

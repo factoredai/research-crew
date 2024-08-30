@@ -1,7 +1,6 @@
-import sqlite3
-import os
 import argparse
-from typing import List
+import os
+import sqlite3
 
 from langgraph.checkpoint.sqlite import SqliteSaver
 from langgraph.graph import END, StateGraph
@@ -17,14 +16,14 @@ from reportgen_agent.utils import wrap_node_with_logging
 from reportgen_agent.utils.storage_utils import create_run_directory
 
 
-def main(query: str):
+def main(user_query: str):
     """
-    Main function to generate a report based on the given query.
+    Main function to generate a report based on the given user_query.
 
     Parameters
     ----------
-    query : str
-        The user's query for report generation.
+    user_query : str
+        The user's user_query for report generation.
 
     Returns
     -------
@@ -34,7 +33,7 @@ def main(query: str):
     print(f"Run directory created at: {run_dir}")  # Log the run directory location
 
     initial_state = ReportGenState(
-        query=query,
+        user_query=user_query,
         keywords=[],
         expanded_concepts=[],
         search_results=[],
@@ -98,9 +97,9 @@ def main(query: str):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Generate a report based on a user query.",
-        epilog="Example usage: python run.py 'What are the latest AI trends?'"
+        epilog="Example usage: python run.py 'What are the latest AI trends?'",
     )
-    parser.add_argument("query", type=str, help="The user's query for report generation.")
+    parser.add_argument("user_query", type=str, help="The user's query for report generation.")
     args = parser.parse_args()
 
-    main(query=args.query)
+    main(user_query=args.user_query)

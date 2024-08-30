@@ -14,10 +14,12 @@ format:
 lint:
 	@poetry run ruff check --fix .
 
+# TODO: A lot of typing issues here, need to work on them later
 type-checking:
 	@poetry run mypy .
 
 check: format lint type-checking
 
+# TODO: Tests are not implemented yet
 test: 
 	@poetry run python -m pytest -vv

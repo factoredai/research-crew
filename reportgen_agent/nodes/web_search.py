@@ -13,7 +13,9 @@ from langchain_google_community import GoogleSearchResults
 
 from reportgen_agent.config import settings
 from reportgen_agent.core.state import ReportGenState
+from reportgen_agent.utils.helper_functions import retry_with_exponential_backoff
 
+# TODO: Actually, only TavilySearchResults is working
 
 class SearchProvider(ABC):
     """Abstract base class for search providers."""
@@ -46,10 +48,8 @@ class SerpAPISearchProvider(SearchProvider):
         self.search_engine = SerpAPIWrapper(serpapi_api_key=settings.web_search.serpapi_api_key)
 
     def search(self, query: str, num_results: int) -> List[Dict[str, str]]:
-        # TODO: Doesn't support number of search results??
-        # params = {"num": num_results}
         params = {}
-        results = self.search_engine.results(query, **params)
+        results = retry_with_exponential_backoff(self.search_engine.results, query, **params)
         return [
             {
                 "title": result.get("title", ""),
@@ -70,7 +70,7 @@ class GoogleSearchProvider(SearchProvider):
         )
 
     def search(self, query: str, num_results: int) -> List[Dict[str, str]]:
-        results = self.search_tool.results(query=query, num_results=num_results)
+        results = retry_with_exponential_backoff(self.search_tool.results, query=query, num_results=num_results)
         return [
             {
                 "title": result.get("title", ""),
@@ -91,7 +91,7 @@ class BingSearchProvider(SearchProvider):
         )
 
     def search(self, query: str, num_results: int) -> List[Dict[str, str]]:
-        results = self.search_tool.run(f"{query}, num_results={num_results}")
+        results = retry_with_exponential_backoff(self.search_tool.run, f"{query}, num_results={num_results}")
         return [
             {
                 "title": result.get("name", ""),
@@ -114,7 +114,7 @@ class BraveSearchProvider(SearchProvider):
         )
 
     def search(self, query: str, num_results: int) -> List[Dict[str, str]]:
-        results = self.search_tool.run(query)
+        results = retry_with_exponential_backoff(self.search_tool.run, query)
         print(results)
         return [
             {
@@ -144,7 +144,7 @@ class TavilySearchProvider(SearchProvider):
         )
 
     def search(self, query: str, num_results: int) -> List[Dict[str, str]]:
-        results = self.search_tool.invoke({"query": query})
+        results = retry_with_exponential_backoff(self.search_tool.invoke, {"query": query})
         return [
             {
                 "title": result.get("title", ""),
@@ -236,7 +236,7 @@ def perform_web_search_node(state: ReportGenState, run_dir: str) -> Dict:
     keywords = state.get("keywords", [])
     expanded_concepts = state.get("expanded_concepts", [])
     search_terms = keywords + expanded_concepts
-    search_query = state.get("query", "") + " " + " ".join(search_terms[: settings.web_search.max_search_terms])
+    search_query = state["user_query"] + " " + " ".join(search_terms[: settings.web_search.max_search_terms])
 
     print(f"{search_query = }")
     search_results = perform_web_search(query=search_query, num_results=settings.web_search.num_results)

@@ -6,6 +6,9 @@ import traceback
 from typing import Callable, TypedDict
 from urllib.parse import urlparse
 
+from openai import RateLimitError
+from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_exponential
+
 from .storage_utils import save_state
 
 # Configure logging to output to the notebook cell
@@ -14,6 +17,15 @@ logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(message)s",
     handlers=[logging.StreamHandler(sys.stdout)],  # Direct logs to stdout
 )
+
+
+@retry(
+    wait=wait_exponential(multiplier=1, min=4, max=10),
+    stop=stop_after_attempt(5),
+    retry=retry_if_exception_type(RateLimitError),
+)
+def retry_with_exponential_backoff(func, *args, **kwargs):
+    return func(*args, **kwargs)
 
 
 # TODO: It doesn't seem right to wrap every node for adding logging and

@@ -4,7 +4,7 @@ from typing import List, TypedDict
 class ReportGenState(TypedDict):
     """Represents the state of the ReportGen workflow."""
 
-    query: str
+    user_query: str
 
     keywords: List[str]
     expanded_concepts: List[str]

@@ -19,7 +19,7 @@ llm = ChatOpenAI(
     model=settings.pre_report_summarization.reduce_model,
     api_key=settings.general.openai_api_key,
 )
-reduce_prompt = ChatPromptTemplate([("human", settings.pre_report_summarization.reduce_prompt)])
+reduce_prompt = ChatPromptTemplate.from_template(settings.pre_report_summarization.reduce_prompt)
 reduce_chain = reduce_prompt | llm | StrOutputParser()
 
 
@@ -32,7 +32,9 @@ def collapse_summaries(state: OverallState, run_dir: str):
     doc_lists = split_list_of_docs(state["collapsed_summaries"], get_num_tokens, TOKEN_MAX)
     results = []
     for doc_list in doc_lists:
-        results.append(collapse_docs(doc_list, reduce_chain.invoke))
+        results.append(
+            collapse_docs(doc_list, lambda docs: reduce_chain.invoke({"docs": docs, "user_query": state["user_query"]}))
+        )
 
     return {"collapsed_summaries": results}
 

@@ -3,19 +3,19 @@ from typing import Dict
 from reportgen_agent.core.state import ReportGenState
 
 
-def check_relevance_to_query(report: str, query: str) -> bool:
+def check_relevance_to_query(report: str, user_query: str) -> bool:
     """
-    Placeholder function to check if the report is relevant to the initial query.
+    Placeholder function to check if the report is relevant to the initial user_query.
 
     Args:
         report (str): The generated Markdown report.
-        query (str): The initial query provided by the user.
+        user_query (str): The initial user_query provided by the user.
 
     Returns:
         bool: True if the report is relevant, False otherwise.
     """
     # Placeholder implementation: Simple keyword check (this should be more complex in a real implementation)
-    return query.lower() in report.lower()
+    return user_query.lower() in report.lower()
 
 
 def perform_final_review(state: ReportGenState) -> bool:
@@ -29,8 +29,8 @@ def perform_final_review(state: ReportGenState) -> bool:
         bool: True if the final review passes, False otherwise.
     """
 
-    # Check if the report is relevant to the initial query
-    is_relevant = check_relevance_to_query(state["markdown_report"], state["query"])
+    # Check if the report is relevant to the initial user_query
+    is_relevant = check_relevance_to_query(state["markdown_report"], state["user_query"])
 
     # Additional checks can be implemented here, such as completeness, clarity, formatting, etc.
 
@@ -54,7 +54,7 @@ def review_final_output(state: ReportGenState) -> Dict:
     # If the review does not pass, you might raise an error, or set a flag in the state.
     # For this placeholder, we'll just log the result.
     if not review_passed:
-        print("Final review failed: The report may not be fully relevant to the query.")
+        print("Final review failed: The report may not be fully relevant to the user_query.")
         state["final_review_passed"] = False
     else:
         print("Final review passed: The report is ready for delivery.")

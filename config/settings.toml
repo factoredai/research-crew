@@ -12,7 +12,7 @@ concept_expansion_model = "gpt-4o-2024-08-06"
 max_keywords = 5
 max_concepts = 5
 keyword_extraction_prompt = """
-Given the following user query: "{query}"
+Given the following user query: "{user_query}"
 
 Please extract up to {max_keywords} important keywords from this query. 
 Focus on nouns, verbs, and adjectives that capture the main topics and intentions of the query. 
@@ -20,7 +20,7 @@ Avoid common words or stopwords unless they are crucial to understanding the que
 """
 
 concept_expansion_prompt = """
-Given the following user query: "{query}"
+Given the following user query: "{user_query}"
 And the extracted keywords: {keywords}
 
 Please provide a list of up to {max_concepts} related concepts, terms, or ideas that would be relevant for expanding this query.
@@ -31,10 +31,9 @@ Each concept should be closely related to the query and/or one or more of the gi
 provider = "tavily"  # Options: tavily, serpapi, google, bing, brave
 max_results = 10
 max_search_terms = 10
-num_results = 5
+# num_results = 5
 # num_results = 10
-# num_results = 20
-
+num_results = 40
 
 bing_search_url = "https://api.bing.microsoft.com/v7.0/search"
 
@@ -48,13 +47,22 @@ bing_search_url = "https://api.bing.microsoft.com/v7.0/search"
 
 [pre_report_summarization]
 map_model = "gpt-4o-mini-2024-07-18"
-map_prompt = "Write a concise summary of the following:\\n\\n{content}"
+map_prompt = """
+Write a summary of the following content, focusing on the most important information for
+the user query: "{user_query}"
+
+```
+{content}
+```
+"""
 reduce_model = "gpt-4o-mini-2024-07-18"
 reduce_prompt = """
 The following is a set of summaries:
+```
 {docs}
+```
 Take these and distill it into a final, consolidated summary
-of the main themes.
+that answers the user query: "{user_query}"
 """
 max_num_tokens2summarize = 4000
 
@@ -67,7 +75,7 @@ max_num_tokens2summarize = 4000
 model = "gpt-4o-mini-2024-07-18"
 prompt = """
 You are a helpful assistant. Based on the following **user query** and **content**
-build a tech report. Also use your own knowledge.
+build an extensive tech report. Also add your own knowledge on the subject.
 
 **User query**: "{user_query}"
 
