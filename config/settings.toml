@@ -29,11 +29,10 @@ Each concept should be closely related to the query and/or one or more of the gi
 
 [web_search]
 provider = "tavily"  # Options: tavily, serpapi, google, bing, brave
-max_results = 10
 max_search_terms = 10
 # num_results = 5
-# num_results = 10
-num_results = 40
+num_results = 10
+# num_results = 40
 
 bing_search_url = "https://api.bing.microsoft.com/v7.0/search"
 

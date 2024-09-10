@@ -2,6 +2,7 @@
 
 ## Phase 2: Debugging and Quality Assurance
 
+**Experiment tracking???**
 6. [ ] Implement query processing effectiveness test
    - [ ] Create test cases with and without enhanced query processing
    - [ ] Implement comparison logic for search results

@@ -1,20 +1,5 @@
 # Roadmap
 
-## Phase 1: MVP Implementation
-
-1. **Development Environment Setup**
-   - **Task**: Migrate from conda envs to devcontainer + poetry
-   - **Details**:
-     - Set up a devcontainer configuration
-     - Create a pyproject.toml file for poetry
-     - Update documentation for new development setup
-
-2. **User Interface Development**
-   - **Task**: Create run script and Jupyter notebook
-   - **Details**:
-     - Implement a script that accepts user queries and optional webpage inputs
-     - Develop a Jupyter notebook for flexible usage and demonstration
-
 ## Phase 2: Debugging and Quality Assurance
 
 1. **Query Processing Effectiveness**

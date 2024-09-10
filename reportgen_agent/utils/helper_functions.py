@@ -18,7 +18,8 @@ logging.basicConfig(
     handlers=[logging.StreamHandler(sys.stdout)],  # Direct logs to stdout
 )
 
-
+# TODO: This functions is being used in place where it doesn't make sense
+# given we are focusing on the RateLimitError of OpenAI3
 @retry(
     wait=wait_exponential(multiplier=1, min=4, max=10),
     stop=stop_after_attempt(5),
