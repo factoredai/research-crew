@@ -2,10 +2,15 @@
 
 ## Phase 2: Debugging and Quality Assurance
 
-**Experiment tracking???**
+* design pattern - builder: https://refactoring.guru/design-patterns/builder
+
+* productionizing the project: fastapi + react template
+
+
 6. [ ] Implement query processing effectiveness test
    - [ ] Create test cases with and without enhanced query processing
    - [ ] Implement comparison logic for search results
+   - [ ] Does generating research questions instead of using the raw user queryimprove search results?
 
 7. [ ] Develop map summarizations validation
    - [ ] Create test cases for summarization quality

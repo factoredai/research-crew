@@ -3,7 +3,7 @@
 	"build": {
 		"dockerfile": "Dockerfile"
 	},
-	// For having git ssh credentials
+	// Mount for git ssh credentials
 	"mounts": [
 		"source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached"
 	],

@@ -236,7 +236,8 @@ def perform_web_search_node(state: ReportGenState, run_dir: str) -> Dict:
     keywords = state.get("keywords", [])
     expanded_concepts = state.get("expanded_concepts", [])
     search_terms = keywords + expanded_concepts
-    search_query = state["user_query"] + " " + " ".join(search_terms[: settings.web_search.max_search_terms])
+    # search_query = state["user_query"] + " " + " ".join(search_terms[: settings.web_search.max_search_terms])
+    search_query = state["user_query"]
 
     print(f"{search_query = }")
     search_results = perform_web_search(query=search_query, num_results=settings.web_search.num_results)

@@ -17,3 +17,16 @@ FROM mcr.microsoft.com/devcontainers/python:1.1-3.11
 
 RUN sudo apt update && \
     pipx install poetry==1.8.3
+
+# # Copy .gitconfig
+# COPY ~/.gitconfig /home/vscode/.gitconfig
+
+# # Set correct ownership and permissions
+# RUN chown vscode:vscode /home/vscode/.gitconfig && \
+#     chmod 644 /home/vscode/.gitconfig
+
+# # Set the safe.directory in git config
+# RUN git config --global --add safe.directory /workspaces/research-crew
+
+# # Switch back to the vscode user
+# USER vscode
