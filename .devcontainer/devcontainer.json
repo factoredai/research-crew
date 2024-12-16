@@ -1,0 +1,39 @@
+{
+	"name": "reportgen_agent",
+	"build": {
+		"dockerfile": "Dockerfile"
+	},
+	// Mount for git ssh credentials
+	"mounts": [
+		"source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached"
+	],
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	"postCreateCommand": "poetry install",
+	
+	"customizations": {
+		"vscode": {
+			"settings": {
+				"terminal.integrated.defaultProfile.linux": "zsh"
+			},
+			"extensions": [
+				"ms-toolsai.jupyter",
+				"tamasfe.even-better-toml"
+			]
+		}
+	}
+}
+
+// For having git credentials in the container, add these lines to your 
+// ~/.bash_profile or ~/.zprofile (for Zsh) so it starts on login:
+
+// if [ -z "$SSH_AUTH_SOCK" ]; then
+//    # Check for a currently running instance of the agent
+//    RUNNING_AGENT="`ps -ax | grep 'ssh-agent -s' | grep -v grep | wc -l | tr -d '[:space:]'`"
+//    if [ "$RUNNING_AGENT" = "0" ]; then
+//         # Launch a new instance of the agent
+//         ssh-agent -s &> $HOME/.ssh/ssh-agent
+//    fi
+//    eval `cat $HOME/.ssh/ssh-agent`
+//    ssh-add ~/.ssh/id_ed25519
+// fi
